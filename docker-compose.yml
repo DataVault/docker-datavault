@@ -1,0 +1,55 @@
+version: '2'
+services:
+  rabbitmq:
+    image: bitnami/rabbitmq:latest
+    volumes:
+      - 'rabbitmq_data:/bitnami'
+    environment:
+      RABBITMQ_USERNAME: datavault
+      RABBITMQ_PASSWORD: datavault
+    networks:
+      - mqnet
+
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: unbr34kable
+      MYSQL_DATABASE: datavault
+      MYSQL_USER: datavault
+      MYSQL_PASSWORD: datavault
+    networks:
+      - dbnet
+
+  web:
+    build: .
+    depends_on:
+      - mysql
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./tmp/datavault/active:/tmp/datavault/active:rw
+      - ./tmp/datavault/archive:/tmp/datavault/archive:rw
+      - ./tmp/datavault/temp:/tmp/datavault/temp:rw
+      - ./tmp/datavault/meta:/tmp/datavault/meta:rw
+      - ./datavault/datavault-assembly/target/datavault-assembly-1.0-SNAPSHOT-assembly/datavault-home:/docker_datavault-home:rw
+    links:
+      - mysql:mysql
+    networks:
+      - dbnet
+      - mqnet
+    depends_on:
+      - rabbitmq
+      - mysql
+
+volumes:
+  db_data:
+  rabbitmq_data:
+ 
+networks:
+  dbnet:
+    driver: bridge
+  mqnet:
+    driver: bridge

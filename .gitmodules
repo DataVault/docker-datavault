@@ -1,0 +1,3 @@
+[submodule "datavault"]
+	path = datavault
+	url = git@github.com:DataVault/datavault.git
