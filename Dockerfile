@@ -24,6 +24,8 @@ RUN mkdir -p /var/log/supervisor
 
 ADD supervisor_datavault.conf /etc/supervisor/conf.d/datavault.conf
 
+# Couldn't use the whole directory as volume or datavault.properties gets overwritten
+ADD datavault/datavault-assembly/target/datavault-assembly-1.0-SNAPSHOT-assembly/datavault-home /docker_datavault-home
 # Use customised properties
 ADD datavault.properties /docker_datavault-home/config/datavault.properties
 
@@ -38,7 +40,7 @@ RUN ln -s /Users/dir /Users/symdir
 RUN ln -s $DATAVAULT_HOME/webapps/datavault-broker /usr/local/tomcat/webapps/datavault-broker
 RUN ln -s $DATAVAULT_HOME/webapps/datavault-webapp /usr/local/tomcat/webapps/datavault-webapp
 
-WORKDIR /opt/datavault/lib
+WORKDIR /docker_datavault-home/lib
 
 # Make port 80 available to the world outside this container
 EXPOSE 8080
