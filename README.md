@@ -2,6 +2,12 @@
 
 Files for setting up local Docker containers in order to run DataVault
 
+## Clone repository
+
+This repository contains a submodule in order to clone everything run the following command:
+
+`git clone git@github.com:DataVault/docker-datavault.git`
+
 ## Docker Compose
 
 We are using [Docker Compose](https://docs.docker.com/compose/) to start the different services:
