@@ -1,20 +1,18 @@
-{
-  sudo: reqired
+sudo: reqired
 
-  language: java
+language: java
 
-  env:
-    - MAVEN_OPTS=-Xmx2048M
+env:
+  - MAVEN_OPTS=-Xmx2048M
 
-  services:
-    - docker
-  before_install:
-    - docker-compose rm -f
-    - docker-compose pull
-    - docker-compose up --build -d
-  
-  script: mvn clean test package
-  
-  after_script:
-    - docker-compose stop -t 1
-}
+services:
+  - docker
+before_install:
+  - docker-compose rm -f
+  - docker-compose pull
+  - docker-compose up --build -d
+
+script: mvn clean test package
+
+after_script:
+  - docker-compose stop -t 1
