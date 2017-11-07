@@ -3,7 +3,7 @@ services:
   rabbitmq:
     image: bitnami/rabbitmq:latest
     volumes:
-      - 'rabbitmq_data:/bitnami'
+      - ./rabbitmq_data:/bitnami
     environment:
       RABBITMQ_USERNAME: datavault
       RABBITMQ_PASSWORD: datavault
@@ -14,8 +14,8 @@ services:
     image: mysql:5.7
     ports:
       - "3306:3306"
-    volumes:
-      - db_data:/var/lib/mysql
+    # volumes:
+    #   - ./db_data:/var/lib/mysql:rw
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: unbr34kable
@@ -26,7 +26,9 @@ services:
       - dbnet
 
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile_datavault
     ports:
       - "8080:8080"
     volumes:
@@ -36,8 +38,7 @@ services:
       - ./tmp/datavault/meta:/tmp/datavault/meta:rw
       - ./datavault/datavault-assembly/target/datavault-assembly-1.0-SNAPSHOT-assembly/datavault-home/lib:/docker_datavault-home/lib:rw
       - ./datavault/datavault-assembly/target/datavault-assembly-1.0-SNAPSHOT-assembly/datavault-home/webapps:/docker_datavault-home/webapps:rw
-    links:
-      - mysql:mysql
+      - ./tmp/Users:/Users:rw
     networks:
       - dbnet
       - mqnet
@@ -45,9 +46,28 @@ services:
       - rabbitmq
       - mysql
 
-volumes:
-  db_data:
-  rabbitmq_data:
+  workers:
+    build: 
+      context: .
+      dockerfile: Dockerfile_worker
+    volumes:
+      - ./tmp/datavault/active:/tmp/datavault/active:rw
+      - ./tmp/datavault/archive:/tmp/datavault/archive:rw
+      - ./tmp/datavault/temp:/tmp/datavault/temp:rw
+      - ./tmp/datavault/meta:/tmp/datavault/meta:rw
+      - ./datavault/datavault-assembly/target/datavault-assembly-1.0-SNAPSHOT-assembly/datavault-home/lib:/docker_datavault-home/lib:rw
+      - ./tmp/Users:/Users:rw
+    networks:
+      - dbnet
+      - mqnet
+    depends_on:
+      - rabbitmq
+      - mysql
+      - web
+
+# volumes:
+#   db_data:
+#   rabbitmq_data:
  
 networks:
   dbnet:
