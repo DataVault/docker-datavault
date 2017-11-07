@@ -8,14 +8,13 @@
 
   services:
     - docker
-
   before_install:
     - docker-compose rm -f
     - docker-compose pull
     - docker-compose up --build -d
-
-  script: "mvn clean test package"
-
+  
+  script: mvn clean test package
+  
   after_script:
     - docker-compose stop -t 1
 }
