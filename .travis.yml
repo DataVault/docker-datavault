@@ -1,4 +1,4 @@
-sudo: reqired
+sudo: required
 
 language: java
 
@@ -7,7 +7,9 @@ env:
 
 services:
   - docker
+
 before_install:
+  - setup_docker.sh
   - docker-compose rm -f
   - docker-compose pull
   - docker-compose up --build -d

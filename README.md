@@ -6,7 +6,15 @@ Files for setting up local Docker containers in order to run DataVault
 
 This repository contains a submodule in order to clone everything run the following command:
 
-`git clone git@github.com:DataVault/docker-datavault.git`
+`git clone --recursive git@github.com:DataVault/docker-datavault.git`
+
+Then run the setup script:
+
+`./setup_docker.sh`
+
+This will create several empty directoreis shared with the docker containers.
+
+Then you might want to ad some files into the `/tmp/Users/`, this will be used as the local storage by the containers.
 
 ## Docker Compose
 
