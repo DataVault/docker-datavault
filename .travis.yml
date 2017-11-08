@@ -14,10 +14,13 @@ before_install:
   - docker-compose pull
 
 script: 
+  - cd datavault
   - mvn clean
-  - mvn package # required for docker build
+  - mvn package -Dmaven.test.skip=true # required for docker build
+  - cd ..
   - docker-compose build
   - docker-compose up -d
+  - cd datavault
   - mvn test
 
 after_script:
