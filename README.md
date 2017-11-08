@@ -21,15 +21,18 @@ Then you might want to ad some files into the `/tmp/Users/`, this will be used a
 We are using [Docker Compose](https://docs.docker.com/compose/) to start the different services:
 * MySQL DB - using `mysql:5.7` image
 * RabbitMQ - using `bitnami/rabbitmq:latest` image
-* The Webapp + Workers + Brokers - using local DockerFile.
+* The Webapp + Brokers - using local DockerFile based on `tomcat:7-jre8`.
+* Workers - using local DockerFile based on `java:8`.
 
-Later we might want to sepparate the last in 3 different containers.
+The containers require the application to be build fires:
 
-You can build each service with the following command:
+`mvn clean package`
+
+Then, you can build all services with the following command:
 
 `docker-compose build`
 
-And start each service:
+And start each service with:
 
 `docker-compose up`
 
@@ -38,10 +41,6 @@ Once started, you should be able to access the application at: http://localhost:
 You can then access the application container using:
 
 `docker-compose exec web /bin/bash`
-
-## DockerFile
-
-The DockerFile is based on `tomcat:7-jre8` image.
 
 ## Supervisor
 

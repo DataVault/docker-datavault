@@ -12,10 +12,13 @@ before_install:
   # - setup_docker.sh
   - docker-compose rm -f
   - docker-compose pull
+
+script: 
+  - mvn clean
+  - mvn package # required for docker build
   - docker-compose build
   - docker-compose up -d
-
-script: mvn clean test package
+  - mvn test
 
 after_script:
   - docker-compose stop -t 1
