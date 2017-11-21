@@ -2,6 +2,9 @@ version: '2'
 services:
   rabbitmq:
     image: bitnami/rabbitmq:latest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
     volumes:
       - ./rabbitmq_data:/bitnami
     environment:
@@ -14,8 +17,8 @@ services:
     image: mysql:5.7
     ports:
       - "53306:3306"
-    # volumes:
-    #   - ./db_data:/var/lib/mysql:rw
+    volumes:
+      - ./db_data:/var/lib/mysql:rw
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: unbr34kable
@@ -55,15 +58,13 @@ services:
       - ./tmp/datavault/archive:/tmp/datavault/archive:rw
       - ./tmp/datavault/temp:/tmp/datavault/temp:rw
       - ./tmp/datavault/meta:/tmp/datavault/meta:rw
-      - ./datavault/datavault-assembly/target/datavault-assembly-1.0-SNAPSHOT-assembly/datavault-home/lib:/docker_datavault-home/lib:rw
+      - ./datavault/datavault-worker/target:/docker_datavault-home/lib:rw
       - ./tmp/Users:/Users:rw
     networks:
       - dbnet
       - mqnet
     depends_on:
       - rabbitmq
-      - mysql
-      - web
 
 # volumes:
 #   db_data:

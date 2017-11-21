@@ -18,12 +18,6 @@ RUN apt-get -y install vim
 # Install MySql client
 RUN apt-get install -y mysql-client
 
-# Install supervisor
-RUN apt-get install -y supervisor
-RUN mkdir -p /var/log/supervisor
-
-ADD supervisor_datavault.conf /etc/supervisor/conf.d/datavault.conf
-
 # Couldn't use the whole directory as volume or datavault.properties gets overwritten
 ADD datavault/datavault-assembly/target/datavault-assembly-1.0-SNAPSHOT-assembly/datavault-home /docker_datavault-home
 # Use customised properties
@@ -33,9 +27,12 @@ ADD datavault.properties /docker_datavault-home/config/datavault.properties
 RUN ln -s $DATAVAULT_HOME/webapps/datavault-broker /usr/local/tomcat/webapps/datavault-broker
 RUN ln -s $DATAVAULT_HOME/webapps/datavault-webapp /usr/local/tomcat/webapps/datavault-webapp
 
-WORKDIR /docker_datavault-home/lib
+WORKDIR /usr/local/tomcat
 
 # Make port 80 available to the world outside this container
 EXPOSE 8080
 
-CMD supervisord -c /etc/supervisor/supervisord.conf  -n
+ADD wait-for-rabbitmq.sh /docker_datavault-home/wait-for-rabbitmq.sh
+
+#CMD supervisord -c /etc/supervisor/supervisord.conf  -n
+CMD /docker_datavault-home/wait-for-rabbitmq.sh;/usr/local/tomcat/bin/catalina.sh run

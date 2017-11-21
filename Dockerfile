@@ -45,4 +45,4 @@ WORKDIR /docker_datavault-home/lib
 # Make port 80 available to the world outside this container
 EXPOSE 8080
 
-CMD supervisord -c /etc/supervisor/supervisord.conf  -n
+CMD supervisord -c /etc/supervisor/supervisord.conf -n

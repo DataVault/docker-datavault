@@ -1,7 +1,0 @@
-tmp/datavault/active/*
-tmp/datavault/archive/*
-tmp/datavault/meta/*
-tmp/datavault/temp/*
-db_data/*
-tmp/Users/*
-rabbitmq_data/*
