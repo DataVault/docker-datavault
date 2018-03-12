@@ -39,8 +39,8 @@ services:
       - ./tmp/datavault/archive:/tmp/datavault/archive:rw
       - ./tmp/datavault/temp:/tmp/datavault/temp:rw
       - ./tmp/datavault/meta:/tmp/datavault/meta:rw
-      - ./datavault/datavault-assembly/target/datavault-assembly-1.0-SNAPSHOT-assembly/datavault-home/lib:/docker_datavault-home/lib:rw
-      - ./datavault/datavault-assembly/target/datavault-assembly-1.0-SNAPSHOT-assembly/datavault-home/webapps:/docker_datavault-home/webapps:rw
+      - ../datavault/datavault-assembly/target/datavault-assembly-1.0-SNAPSHOT-assembly/datavault-home/lib:/docker_datavault-home/lib
+      - ../datavault/datavault-assembly/target/datavault-assembly-1.0-SNAPSHOT-assembly/datavault-home/webapps:/docker_datavault-home/webapps
       - ./tmp/Users:/Users:rw
     networks:
       - dbnet
@@ -58,7 +58,7 @@ services:
       - ./tmp/datavault/archive:/tmp/datavault/archive:rw
       - ./tmp/datavault/temp:/tmp/datavault/temp:rw
       - ./tmp/datavault/meta:/tmp/datavault/meta:rw
-      - ./datavault/datavault-worker/target:/docker_datavault-home/lib:rw
+      - ../datavault/datavault-worker/target:/docker_datavault-home/lib:rw
       - ./tmp/Users:/Users:rw
     networks:
       - dbnet
