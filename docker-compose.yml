@@ -1,19 +1,23 @@
-version: '2'
+version: '2.1'
 services:
   rabbitmq:
-    image: bitnami/rabbitmq:latest
+    container_name: datavault-dev-rabbitmq
+    image: rabbitmq:3-management-alpine
     ports:
-      - "5672:5672"
       - "15672:15672"
-    volumes:
-      - ./rabbitmq_data:/bitnami
     environment:
-      RABBITMQ_USERNAME: datavault
-      RABBITMQ_PASSWORD: datavault
+      RABBITMQ_DEFAULT_USER: datavault
+      RABBITMQ_DEFAULT_PASS: datavault
     networks:
       - mqnet
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:15672"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   mysql:
+    container_name: datavault-dev-mysql
     image: mysql:5.7
     ports:
       - "53306:3306"
@@ -29,6 +33,7 @@ services:
       - dbnet
 
   web:
+    container_name: datavault-dev-web
     build:
       context: .
       dockerfile: Dockerfile_datavault
@@ -49,8 +54,9 @@ services:
       - rabbitmq
       - mysql
 
-  workers:
-    build: 
+  worker:
+    container_name: datavault-dev-worker
+    build:
       context: .
       dockerfile: Dockerfile_worker
     volumes:
@@ -61,7 +67,6 @@ services:
       - ../datavault/datavault-worker/target:/docker_datavault-home/lib:rw
       - ./tmp/Users:/Users:rw
     networks:
-      - dbnet
       - mqnet
     depends_on:
       - rabbitmq
@@ -69,7 +74,7 @@ services:
 # volumes:
 #   db_data:
 #   rabbitmq_data:
- 
+
 networks:
   dbnet:
     driver: bridge
